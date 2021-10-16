@@ -32,6 +32,12 @@
   object-fit: cover;
   transition: transform var(--animation-duration) var(--timing-function);
 }
+.gallery__image--large {
+  display: block;
+  height: 70%;
+  width: 70%;
+  margin: 0 auto;
+}
 
 .gallery__link {
   display: block;
