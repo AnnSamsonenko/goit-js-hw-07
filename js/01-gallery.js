@@ -24,6 +24,19 @@ const galleryCardsMarkup = createGalleryCardsMarkup(galleryItems);
 galleryContainer.insertAdjacentHTML("beforeend", galleryCardsMarkup);
 galleryContainer.addEventListener("click", onGalleryContainerClick);
 
+const settingsForModal = {
+  onShow: (modal) => {
+    modal.element().querySelector("img").onclick = modal.close;
+    window.addEventListener("keydown", onEscKeyPress);
+    function onEscKeyPress(event) {
+      if (event.code === "Escape") {
+        window.removeEventListener("keydown", onEscKeyPress);
+        modal.close();
+      }
+    }
+  },
+};
+
 function createGalleryCardsMarkup(galleryItems) {
   return galleryItems
     .map(({ preview, original, description }) => {
@@ -56,7 +69,7 @@ function onGalleryContainerClick(event) {
 }
 
 function openModal(currentImageUrl, currentImageAlt) {
-  const instance = basicLightbox.create(
+  const modal = basicLightbox.create(
     `
      <div class="modal">
        <img
@@ -66,21 +79,10 @@ function openModal(currentImageUrl, currentImageAlt) {
     />
     </div>
 `,
-    {
-      onShow: (instance) => {
-        instance.element().querySelector("img").onclick = instance.close;
-        window.addEventListener("keydown", onEscKeyPress);
-        function onEscKeyPress(event) {
-          if (event.code === "Escape") {
-            window.removeEventListener("keydown", onEscKeyPress);
-            instance.close();
-          }
-        }
-      },
-    }
+    settingsForModal
   );
 
-  instance.show();
+  modal.show();
 }
 
 //Функция для html TEMPLATE
