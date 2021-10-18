@@ -1,6 +1,6 @@
 :root {
   --timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  --animation-duration: 250ms;
+  --animation-duration: 800ms;
 }
 
 .gallery {
@@ -16,22 +16,26 @@
   margin-right: auto;
 }
 
-.gallery__item {
-  position: relative;
+.gallery__image {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: translateY(50%);
+  transition: all var(--animation-duration) var(--timing-function);
   box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2),
     0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
+}
+
+.gallery__image.appear {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .gallery__image:hover {
   transform: scale(1.03);
 }
 
-.gallery__image {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  transition: transform var(--animation-duration) var(--timing-function);
-}
 .gallery__image--large {
   display: block;
   height: 70%;

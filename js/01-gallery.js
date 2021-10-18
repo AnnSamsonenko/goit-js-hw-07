@@ -18,7 +18,6 @@ import { galleryItems } from "./gallery-items.js";
     />
   </a>
 </div>; */
-
 const galleryContainer = document.querySelector(".gallery");
 const galleryCardsMarkup = createGalleryCardsMarkup(galleryItems);
 galleryContainer.insertAdjacentHTML("beforeend", galleryCardsMarkup);
@@ -43,8 +42,9 @@ function createGalleryCardsMarkup(galleryItems) {
       return `<div class="gallery__item">
   <a class="gallery__link" href="${original}">
     <img
-      class="gallery__image"
-      src="${preview}"
+      loading="lazy" 
+      class="gallery__image lazyload"
+      data-src="${preview}"
       data-source="${original}"
       alt="${description}"
     />
@@ -85,7 +85,7 @@ function openModal(currentImageUrl, currentImageAlt) {
   modal.show();
 }
 
-//Функция для html TEMPLATE
+//FUNCTION FOR HTML TEMPLATE
 // function openModal(currentImageUrl, currentImageAlt) {
 //   const instance = basicLightbox.create(document.querySelector("template"));
 //   instance.show();
@@ -93,3 +93,49 @@ function openModal(currentImageUrl, currentImageAlt) {
 //   largeImageRef.src = currentImageUrl;
 //   largeImageRef.alt = currentImageAlt;
 // }
+
+//LAZY LOADING CHROME
+
+// const lazyImages = document.querySelectorAll("img[loading='lazy']");
+// console.log(lazyImages);
+
+// lazyImages.forEach((image) =>
+//   image.addEventListener("load", onImageLoaded, { once: true })
+// );
+
+// function onImageLoaded(event) {
+//   event.target.classList.add("appear");
+//   console.log("Загрузилось");
+// }
+
+//LAZY LOADING CROSSBROWSER
+const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+
+if ("loading" in HTMLImageElement.prototype) {
+  console.log("поддерживает");
+
+  lazyImages.forEach((image) => (image.src = image.dataset.src));
+  addEventListenerToLazyImages();
+} else {
+  console.log("не поддерживает");
+
+  const script = document.createElement("script");
+  script.src =
+    "https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.js";
+  script.integrity = "sha256-nMn34BfOxpKD0GwV5nZMwdS4e8SI8Ekz+G7dLeGE4XY=";
+  script.crossOrigin = "anonymous";
+
+  document.body.appendChild(script);
+  addEventListenerToLazyImages();
+}
+
+function addEventListenerToLazyImages() {
+  lazyImages.forEach((image) =>
+    image.addEventListener("load", onImageLoaded, { once: true })
+  );
+}
+
+function onImageLoaded(event) {
+  event.target.classList.add("appear");
+  console.log("Загрузилось");
+}
