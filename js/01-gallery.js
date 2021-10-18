@@ -1,23 +1,5 @@
 import { galleryItems } from "./gallery-items.js";
-// Change code below this line
-//ЗАДАНИЕ
 
-// Создание и рендер разметки по массиву данных galleryItems и предоставленному шаблону элемента галереи.
-// Реализация делегирования на div.gallery и получение url большого изображения.
-// Подключение скрипта и стилей библиотеки модального окна basicLightbox. Используй CDN сервис jsdelivr и добавь в проект ссылки на минифицированные (.min) файлы библиотеки.
-// Открытие модального окна по клику на элементе галереи. Для этого ознакомься с документацией и примерами.
-// Замена значения атрибута src элемента <img> в модальном окне перед открытием. Используй готовую разметку модального окна с изображением из примеров библиотеки basicLightbox.
-
-/* <div class="gallery__item">
-  <a class="gallery__link" href="large-image.jpg">
-    <img
-      class="gallery__image"
-      src="small-image.jpg"
-      data-source="large-image.jpg"
-      alt="Image description"
-    />
-  </a>
-</div>; */
 const galleryContainer = document.querySelector(".gallery");
 const galleryCardsMarkup = createGalleryCardsMarkup(galleryItems);
 galleryContainer.insertAdjacentHTML("beforeend", galleryCardsMarkup);
@@ -26,7 +8,7 @@ galleryContainer.addEventListener("click", onGalleryContainerClick);
 const settingsForModal = {
   onShow: (modal) => {
     modal.element().querySelector("img").onclick = modal.close;
-    window.addEventListener("keydown", onEscKeyPress);
+    window.addEventListener("keydown", onEscKeyPress, { once: true });
     function onEscKeyPress(event) {
       if (event.code === "Escape") {
         window.removeEventListener("keydown", onEscKeyPress);
@@ -121,8 +103,9 @@ if ("loading" in HTMLImageElement.prototype) {
 
   const script = document.createElement("script");
   script.src =
-    "https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.js";
-  script.integrity = "sha256-nMn34BfOxpKD0GwV5nZMwdS4e8SI8Ekz+G7dLeGE4XY=";
+    "https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js";
+  script.integrity =
+    "sha512-q583ppKrCRc7N5O0n2nzUiJ+suUv7Et1JGels4bXOaMFQcamPk9HjdUknZuuFjBNs7tsMuadge5k9RzdmO+1GQ==";
   script.crossOrigin = "anonymous";
 
   document.body.appendChild(script);
