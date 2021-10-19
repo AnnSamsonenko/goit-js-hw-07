@@ -1,10 +1,12 @@
 import { galleryItems } from "./gallery-items.js";
 
 const galleryContainer = document.querySelector(".gallery");
-const galleryCardsMarkup = createGalleryCardsMarkup(galleryItems);
 
+const galleryCardsMarkup = createGalleryCardsMarkup(galleryItems);
 galleryContainer.insertAdjacentHTML("beforeend", galleryCardsMarkup);
+
 galleryContainer.addEventListener("click", onGalleryContainerClick);
+let modal = "";
 
 function createGalleryCardsMarkup(galleryItems) {
   return galleryItems
@@ -39,19 +41,23 @@ function onGalleryContainerClick(event) {
 }
 
 const settingsForModal = {
-  onShow: (modal) => {
+  onShow: () => {
     modal.element().querySelector("img").onclick = modal.close;
     window.addEventListener("keydown", onEscKeyPress, { once: true });
-    function onEscKeyPress(event) {
-      if (event.code === "Escape") {
-        modal.close();
-      }
-    }
+  },
+  onClose: () => {
+    window.removeEventListener("keydown", onEscKeyPress, { once: true });
   },
 };
 
+function onEscKeyPress(event) {
+  if (event.code === "Escape") {
+    modal.close();
+  }
+}
+
 function openModal(currentImageUrl, currentImageAlt) {
-  const modal = basicLightbox.create(
+  modal = basicLightbox.create(
     `
      <div class="modal">
        <img
@@ -65,7 +71,6 @@ function openModal(currentImageUrl, currentImageAlt) {
   );
 
   modal.show();
-  console.log(modal.element());
 }
 
 //FUNCTION FOR HTML TEMPLATE
