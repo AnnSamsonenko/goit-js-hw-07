@@ -2,21 +2,9 @@ import { galleryItems } from "./gallery-items.js";
 
 const galleryContainer = document.querySelector(".gallery");
 const galleryCardsMarkup = createGalleryCardsMarkup(galleryItems);
+
 galleryContainer.insertAdjacentHTML("beforeend", galleryCardsMarkup);
 galleryContainer.addEventListener("click", onGalleryContainerClick);
-
-const settingsForModal = {
-  onShow: (modal) => {
-    modal.element().querySelector("img").onclick = modal.close;
-    window.addEventListener("keydown", onEscKeyPress, { once: true });
-    function onEscKeyPress(event) {
-      if (event.code === "Escape") {
-        window.removeEventListener("keydown", onEscKeyPress);
-        modal.close();
-      }
-    }
-  },
-};
 
 function createGalleryCardsMarkup(galleryItems) {
   return galleryItems
@@ -50,6 +38,18 @@ function onGalleryContainerClick(event) {
   openModal(currentImageUrl, currentImageAlt);
 }
 
+const settingsForModal = {
+  onShow: (modal) => {
+    modal.element().querySelector("img").onclick = modal.close;
+    window.addEventListener("keydown", onEscKeyPress, { once: true });
+    function onEscKeyPress(event) {
+      if (event.code === "Escape") {
+        modal.close();
+      }
+    }
+  },
+};
+
 function openModal(currentImageUrl, currentImageAlt) {
   const modal = basicLightbox.create(
     `
@@ -65,6 +65,7 @@ function openModal(currentImageUrl, currentImageAlt) {
   );
 
   modal.show();
+  console.log(modal.element());
 }
 
 //FUNCTION FOR HTML TEMPLATE
@@ -101,6 +102,11 @@ if ("loading" in HTMLImageElement.prototype) {
 } else {
   console.log("не поддерживает");
 
+  generateScript();
+  addEventListenerToLazyImages();
+}
+
+function generateScript() {
   const script = document.createElement("script");
   script.src =
     "https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js";
@@ -109,7 +115,6 @@ if ("loading" in HTMLImageElement.prototype) {
   script.crossOrigin = "anonymous";
 
   document.body.appendChild(script);
-  addEventListenerToLazyImages();
 }
 
 function addEventListenerToLazyImages() {
