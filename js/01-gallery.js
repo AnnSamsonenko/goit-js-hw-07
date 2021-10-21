@@ -6,7 +6,6 @@ const galleryCardsMarkup = createGalleryCardsMarkup(galleryItems);
 galleryContainer.insertAdjacentHTML("beforeend", galleryCardsMarkup);
 
 galleryContainer.addEventListener("click", onGalleryContainerClick);
-let modal = "";
 
 function createGalleryCardsMarkup(galleryItems) {
   return galleryItems
@@ -26,20 +25,6 @@ function createGalleryCardsMarkup(galleryItems) {
     .join("");
 }
 
-function onGalleryContainerClick(event) {
-  event.preventDefault();
-
-  const isGalleryCardEl = event.target.classList.contains("gallery__image");
-  if (!isGalleryCardEl) {
-    return;
-  }
-
-  const currentImageUrl = event.target.dataset.source;
-  const currentImageAlt = event.target.alt;
-
-  openModal(currentImageUrl, currentImageAlt);
-}
-
 const settingsForModal = {
   onShow: () => {
     modal.element().querySelector("img").onclick = modal.close;
@@ -56,45 +41,38 @@ function onEscKeyPress(event) {
   }
 }
 
-function openModal(currentImageUrl, currentImageAlt) {
-  modal = basicLightbox.create(
-    `
+let modal = basicLightbox.create(
+  `
      <div class="modal">
        <img
       class="gallery__image--large"
-      src = "${currentImageUrl}"
-      alt = "${currentImageAlt}"
+      src = ""
+      alt = ""
     />
     </div>
 `,
-    settingsForModal
-  );
+  settingsForModal
+);
 
-  modal.show();
+function onGalleryContainerClick(event) {
+  event.preventDefault();
+
+  const isGalleryCardEl = event.target.classList.contains("gallery__image");
+  if (!isGalleryCardEl) {
+    return;
+  }
+
+  const currentImageUrl = event.target.dataset.source;
+  const currentImageAlt = event.target.alt;
+
+  openModal(currentImageUrl, currentImageAlt);
 }
 
-//FUNCTION FOR HTML TEMPLATE
-// function openModal(currentImageUrl, currentImageAlt) {
-//   const instance = basicLightbox.create(document.querySelector("template"));
-//   instance.show();
-//   const largeImageRef = document.querySelector(".gallery__image--large");
-//   largeImageRef.src = currentImageUrl;
-//   largeImageRef.alt = currentImageAlt;
-// }
-
-//LAZY LOADING CHROME
-
-// const lazyImages = document.querySelectorAll("img[loading='lazy']");
-// console.log(lazyImages);
-
-// lazyImages.forEach((image) =>
-//   image.addEventListener("load", onImageLoaded, { once: true })
-// );
-
-// function onImageLoaded(event) {
-//   event.target.classList.add("appear");
-//   console.log("Загрузилось");
-// }
+function openModal(currentImageUrl, currentImageAlt) {
+  modal.element().querySelector("img").src = currentImageUrl;
+  modal.element().querySelector("img").alt = currentImageAlt;
+  modal.show();
+}
 
 //LAZY LOADING CROSSBROWSER
 const lazyImages = document.querySelectorAll('img[loading="lazy"]');
@@ -132,3 +110,26 @@ function onImageLoaded(event) {
   event.target.classList.add("appear");
   console.log("Загрузилось");
 }
+
+//FUNCTION FOR HTML TEMPLATE
+// function openModal(currentImageUrl, currentImageAlt) {
+//   const instance = basicLightbox.create(document.querySelector("template"));
+//   instance.show();
+//   const largeImageRef = document.querySelector(".gallery__image--large");
+//   largeImageRef.src = currentImageUrl;
+//   largeImageRef.alt = currentImageAlt;
+// }
+
+//LAZY LOADING CHROME
+
+// const lazyImages = document.querySelectorAll("img[loading='lazy']");
+// console.log(lazyImages);
+
+// lazyImages.forEach((image) =>
+//   image.addEventListener("load", onImageLoaded, { once: true })
+// );
+
+// function onImageLoaded(event) {
+//   event.target.classList.add("appear");
+//   console.log("Загрузилось");
+// }
